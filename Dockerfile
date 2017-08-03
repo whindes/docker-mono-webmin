@@ -2,6 +2,12 @@ FROM mono
  
 MAINTAINER William Hindes <bhindes@hotmail.com>
 
+##################################################
+#                                                #
+#  Install Apache and Mono Dependencies          #
+#                                                #
+##################################################
+
 RUN apt-get update \
         && apt-get update \
         && apt-get install mono-devel apache2 libapache2-mod-mono mono-apache-server4 -y --no-install-recommends \
@@ -16,7 +22,13 @@ RUN apt-get update \
             s!^(\s*CustomLog)\s+\S+!\1 /proc/self/fd/1!g; \
             s!^(\s*ErrorLog)\s+\S+!\1 /proc/self/fd/2!g; \
             ' /etc/apache2/apache2.conf
-			
+
+##################################################
+#                                                #
+#  Install Webmin and NGINX module extension.    #
+#                                                #
+##################################################
+
 RUN echo root:pass | chpasswd && \
 	echo "Acquire::GzipIndexes \"false\"; Acquire::CompressionTypes::Order:: \"gz\";" >/etc/apt/apt.conf.d/docker-gzip-indexes && \
 	apt-get update && \

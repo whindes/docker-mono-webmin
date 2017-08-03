@@ -1,7 +1,7 @@
 > Modified from original to blend docker-mono-apache source on [Seif Attar](https://github.com/seif/docker-mono-apache) with docker-webmin source fom [chsliu]
 (https://github.com/chsliu/docker-webmin)
 
-## Run mono web applications with apacke mod_mono
+## Run mono web applications with apache mod_mono
 
 This repository contains Dockerfile for publishing Docker's automated build to the public [Docker Hub Registry](https://registry.hub.docker.com/).
 

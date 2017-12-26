@@ -9,7 +9,7 @@ This repository contains Dockerfile for publishing Docker's automated build to t
 
 ### Base docker image
 
-    debian/jessie
+    alpine
 
 ### Usage
 
@@ -22,7 +22,7 @@ Then build your project, create a Dockerfile, copy the application to /var/www a
     FROM whindes/docker-mono-webmin
     ADD buildOutput/website /var/www/
     CMD /usr/bin/touch /var/webmin/miniserv.log && \
-    /usr/sbin/service webmin restart && \
+    rm -rf /run/webmin/* || true && openrc default && \
     /usr/bin/tail -f /var/webmin/miniserv.log
 
 > Use Webmin to start Apache OR Add more (optional) to CMD /usr/sbin/apache2ctl -D FOREGROUND
@@ -31,15 +31,15 @@ Build your container
 
     docker build -t my_website .
 
-Run it, forwarding the host's port 8080 to the container's port 80
+Run it, forwarding the host's port 80 to the container's NGNIX port 80
 
-    docker run -d -it -p 10000:10000 -p 8080:80 my_website
+    docker run -d -it -p 10000:10000 -p 8080:80 my_website init
 
 
 Log into webmin and manage your server
 ```
 http://hostname.or.ip:10000
-(root:pass)
+(admin:pass)
 ```
 
 You should now be able to access the site on [your local machine port 8080](http://hostname.or.ip:8080/)

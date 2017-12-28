@@ -7,7 +7,7 @@
 
 This repository contains Dockerfile for publishing Docker's automated build to the public [Docker Hub Registry](https://registry.hub.docker.com/).
 
-> NGINX is exposed from the container on port 80 to proxy to Apache on 8080. The mono-fastcgi-server4 loads the application from /var/www.
+> NGINX is exposed from the container on port 80 to proxy to Apache on 8080. The mono-fastcgi-server4 loads the application from /var/www/dotnet.
 
 ### Base docker image
 

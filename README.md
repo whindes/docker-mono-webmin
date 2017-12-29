@@ -1,3 +1,5 @@
+[![](https://images.microbadger.com/badges/image/whindes/docker-mono-webmin:3.7.svg)](https://microbadger.com/images/whindes/docker-mono-webmin:3.7 "Get your own image badge on microbadger.com")  [![](https://images.microbadger.com/badges/version/whindes/docker-mono-webmin:3.7.svg)](https://microbadger.com/images/whindes/docker-mono-webmin:3.7 "Get your own version badge on microbadger.com")
+
 > Modified from original to blend docker-mono-apache source on [Seif Attar](https://github.com/seif/docker-mono-apache) with docker-webmin source fom [chsliu]
 (https://github.com/chsliu/docker-webmin)
 

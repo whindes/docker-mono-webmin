@@ -1,14 +1,10 @@
-FROM alpine:3.7
+FROM alpine:3.12
 LABEL maintainer="William Hindes <bhindes@hotmail.com>"
 
-ENV WEBMIN_VERSION="1.870" \
-	APACHE_VERSION="2.4.29-r1" \
-    # APACHE_VERSION="2.4.27-r1"  
-	MONO_VERSION="5.2.0.224-r0" \
-	# MONO_VERSION="5.0.1.1-r0"
-	NGINX_VERSION="1.12.2-r3" 
-	# NGINX_VERSION=1.12.2-r1
-	
+ENV WEBMIN_VERSION="1.955" \
+	APACHE_VERSION="2.4.46-r0" \ 
+	MONO_VERSION="5.20.1.19-r1" \
+	NGINX_VERSION="1.18.0-r0" 
 
 ADD ./config /tmp
 
@@ -66,7 +62,7 @@ RUN apk upgrade --update \
 		pkgconf \
 		libtool \
 		g++ \
-	&& mkdir /opt \
+	&& mkdir -p /opt \
 	&& git clone https://github.com/mono/xsp.git /opt/xsp \
 	&& cd /opt/xsp \
 	&& ./autogen.sh \
@@ -93,7 +89,9 @@ RUN apk upgrade --update \
 		openssl \
 		perl \
 		perl-html-parser \
-		libssl1.0 perl-crypt-ssleay \
+		libssl1.1 \
+		perl-crypt-ssleay \
+		perl-net-ssleay \
 	&& update-ca-certificates \
 	&& apk add --no-cache --virtual=.build-dependencies \
 		perl-dev \
@@ -109,7 +107,7 @@ RUN apk upgrade --update \
 		libtool \
 		g++ \
 	&& echo | /usr/bin/cpan \
-	&& echo | /usr/bin/perl -MCPAN -e 'install Net::SSLeay' \
+	#&& echo | /usr/bin/perl -MCPAN -e 'install Net::SSLeay' \
 	&& wget http://prdownloads.sourceforge.net/webadmin/webmin-${WEBMIN_VERSION}.tar.gz -O /etc/webmin-${WEBMIN_VERSION}.tar.gz \
 	&& cd /etc \
 	&& gunzip webmin-${WEBMIN_VERSION}.tar.gz \
@@ -139,7 +137,7 @@ RUN apk upgrade --update \
 	&& sed -i '/include \/etc\/nginx\/conf.d\/\*.conf;/ a\\tinclude \/etc\/nginx\/sites-enabled\/\*.conf;' /etc/nginx/nginx.conf \
 	&& ln -s /etc/nginx/sites-available/nginx-default.conf /etc/nginx/sites-enabled/nginx-default.conf \
 	&& cd /etc/webmin \
-	&& ./setup.sh \
+	&& printf "110\n4.19.76" | ./setup.sh \
 	&& mkdir -p /usr/share/webmin/module-archives \
 	&& cd /usr/share/webmin/module-archives \
 	&& wget https://www.justindhoffman.com/sites/justindhoffman.com/files/nginx-0.10.wbm_.gz \

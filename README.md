@@ -21,7 +21,7 @@ First you need to pull the image:
 
 Then build your project, create a Dockerfile, copy the application to /var/www and start runit:
 
-    FROM whindes/docker-mono-webmin
+    FROM whindes/docker-mono-webmin:3.12
     ADD buildOutput/website /var/www/
     CMD /usr/bin/touch /var/webmin/miniserv.log && \
     rm -rf /run/webmin/* || true && openrc default && \

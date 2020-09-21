@@ -1,8 +1,8 @@
 apply_cmd=2
 nginx_conf=/etc/nginx/nginx.conf
-stop_cmd=1
+stop_cmd=rc-service nginx stop
 nginx_version=
-start_cmd=1
+start_cmd=rc-service nginx start
 link_dir=/etc/nginx/sites-enabled
 virt_dir=/etc/nginx/sites-available
 test_config=1

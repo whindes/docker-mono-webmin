@@ -4,7 +4,8 @@ LABEL maintainer="William Hindes <bhindes@hotmail.com>"
 ENV WEBMIN_VERSION="1.955" \
 	APACHE_VERSION="2.4.46-r0" \ 
 	MONO_VERSION="5.20.1.19-r1" \
-	NGINX_VERSION="1.18.0-r0" 
+	NGINX_VERSION="1.18.0-r0" \
+	WEBMIN_CONFIG=/etc/webmin/miniserv.conf
 
 ADD ./config /tmp
 
@@ -121,16 +122,14 @@ RUN apk upgrade --update \
 	&& sed -i 's/enable-collection.pl/enable-collection.plx/g' /etc/webmin/setup.sh \
 	&& ln -s /etc /etc/rc.d \
 	&& ln -s /etc/apache2 /etc/apache2/conf \
-	&& mkdir -p /etc/apache2/sites-available \
-	&& mkdir -p /etc/apache2/sites-enabled \
+	&& mkdir -p /etc/apache2/sites-available /etc/apache2/sites-enabled \
 	&& mv /tmp/apache2-site.conf /etc/apache2/sites-available/apache2-mono_site.conf \
 	&& sed -i 's/Listen 80/Listen 8008/g' /etc/apache2/httpd.conf \
 	&& sed -i '/Listen 8008/ a\Listen 8080' /etc/apache2/httpd.conf \
 	&& sed -i '/IncludeOptional \/etc\/apache2\/conf.d\/\*.conf/ a\IncludeOptional \/etc\/apache2\/sites-enabled\/\*.conf' /etc/apache2/httpd.conf \
 	&& ln -s /etc/apache2/sites-available/apache2-mono_site.conf /etc/apache2/sites-enabled/apache2-mono_site.conf \
 	&& mv /tmp/nginx-proxy.conf /etc/nginx/proxy.conf \
-	&& mkdir -p /etc/nginx/sites-available \
-	&& mkdir -p /etc/nginx/sites-enabled \
+	&& mkdir -p /etc/nginx/sites-available /etc/nginx/sites-enabled \
 	&& mv /tmp/nginx-default.conf /etc/nginx/sites-available/nginx-default.conf \
 	&& sed -i 's/^/#/' /etc/nginx/conf.d/default.conf \
 	&& sed -i '/include \/etc\/nginx\/conf.d\/\*.conf;/ i\\tinclude \/etc\/nginx\/proxy.conf;' /etc/nginx/nginx.conf \
@@ -149,12 +148,14 @@ RUN apk upgrade --update \
 	# Remove build dependencies
 	&& apk del .build-dependencies \
 	&& mv /tmp/entrypoint.sh /entrypoint.sh \
+	&& mv /etc/webmin/miniserv.pl /etc/webmin/miniserv.pl.old \
+	&& mv /tmp/miniserv.pl /etc/webmin/miniserv.pl \
 	&& rm -rf /tmp/* \
 	&& chmod +x /etc/init.d/webmin \
 	&& mkdir /run/webmin \
 	&& rc-update add apache2 default \
 	&& rc-update add nginx default \
-	&& rc-update add webmin default \
+	#&& rc-update add webmin default \
 	&& openrc default
 
 
@@ -167,4 +168,4 @@ EXPOSE 80 443 10000
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["/sbin/init"]
+CMD ["/etc/webmin/miniserv.pl", "--nofork"]

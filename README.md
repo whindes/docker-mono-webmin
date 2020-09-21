@@ -17,7 +17,7 @@ This repository contains Dockerfile for publishing Docker's automated build to t
 
 First you need to pull the image:
 
-    docker pull whindes/docker-mono-webmin
+    docker pull whindes/docker-mono-webmin:3.12
 
 Then build your project, create a Dockerfile, copy the application to /var/www and start runit:
 
